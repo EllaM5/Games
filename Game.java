@@ -1,46 +1,13 @@
+
+import java.util.ArrayList;
+
 public class Game
 {
-    private int score;
-    private int level;
-    private int lives;
-    private String name;
-    public Game(int score, int level, int lives,String name)
+    private ArrayList<Card> deck;
+    private ArrayList<Player> players;
+    public Game()
     {
-        this.score = score;
-        this.level = level;
-        this.lives = lives;
-        this.name = name;
+        deck = new ArrayList<Card>();
+        players = new ArrayList<Player>();
     }
-    public int getScore()
-    {
-        return score;
-    }
-    public int getLevel()
-    {
-        return level;
-    }
-    public int getLives()
-    {
-        return lives;
-    }
-    public String getName()
-    {
-        return name;
-    }
-    public void setScore(int score) {
-        this.score = score;
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
-    public void setLives(int lives) {
-        this.lives = lives;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
 }
