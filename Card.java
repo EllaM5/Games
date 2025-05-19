@@ -8,4 +8,10 @@ public class Card {
     public String toString() {
         return vaule + " of " + suit;
     }
+    public String getSuit() {
+        return suit;
+    }
+    public String getValue() {
+        return vaule;
+    }
 }

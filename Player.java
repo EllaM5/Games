@@ -21,6 +21,9 @@ public class Player {
         }
         return false;
     }
+    public ArrayList<Card> getHand() {
+        return hand;
+    }
     public String toString() {
         return "Player " + playerIndex+1;
     }
@@ -30,5 +33,14 @@ public class Player {
         for (int i = 0; i < hand.size(); i++) {
             System.out.println(i + " " + hand.get(i));
         }
+    }
+    public boolean cardMatch(int cardIndex, Card topCard)
+    {
+        if (hand.get(cardIndex).getSuit().equals(topCard.getSuit()) || hand.get(cardIndex).getValue().equals(topCard.getValue()))
+        {
+            hand.remove(cardIndex);
+            return true;
+        }
+        return false;
     }
 }
