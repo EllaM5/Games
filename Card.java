@@ -6,6 +6,6 @@ public class Card {
         this.vaule = value;
     }
     public String toString() {
-        return suit + " of " + vaule;
+        return vaule + " of " + suit;
     }
 }

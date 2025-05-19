@@ -1,13 +1,14 @@
 
+import java.util.Scanner;
 import java.util.ArrayList;
-import java.util.logging.Handler;
 
 public class Game
 {
     private ArrayList<Card> deck;
-    private ArrayList<Player> players;
+    final private ArrayList<Player> players;
     private int playerCount;
     private ArrayList<Card> discard;
+    Scanner input = new Scanner(System.in);
     public Game(int playerCount)
     {
         this.playerCount = playerCount;
@@ -23,24 +24,86 @@ public class Game
 
         for (int i = 0; i < suits.length; i++) {
             for (int j = 0; j < values.length; j++) {
-                deck.add(new Card(suits[i], values[j]);
+                deck.add(new Card(suits[i], values[j]));
             }
         }
-
+        shuffleDeck();
         // Initialize players
         for (int i = 0; i < playerCount; i++) {
-            players.add(new Player());
+            players.add(new Player(i));
         }
         for (int i = 0; i< players.size();i++){
-            ArrayList<Card. hand = new ArrayList<Card>();
+            ArrayList<Card> hand = new ArrayList<Card>();
             for (int j = 0; j < 5; j++) {
-                Handler.add(deck.remove(Math.random()*52));
+                hand.add(deck.remove((int)Math.random()*52));
             }
             players.get(i).setHand(hand);
-
         }
-        public void shuffleDeck() {
-            
+        discard.add(deck.remove(0));
+        int turn = 0;
+        while (!isWinner())
+        {
+            if (turn == players.size()) {
+                turn = 0;
+            }
+            if (deck.size()==0)
+            {
+                System.out.println("Deck is empty, remaking deck");
+                remakeDeck();
+            }
+            System.out.println(players.get(turn) + "'s turn");
+            System.out.println("Card on top ");
+            PrintTopCard();
+            if (turn == 0)
+            {
+                System.out.println("Which card do you want to place down? (Enter the index)");
+                players.get(0).printHand();
+                int cardIndex = input.nextInt();
+                if (players.get(0).cardMatch(cardIndex, discard.get(0)))
+                {
+                    discardCard(players.get(0).getHand().get(cardIndex));
+                    System.out.println("Card placed down");
+                }
+                else
+                {
+                    System.out.println("Card does not match, drawing a card");
+                    players.get(0).getHand().add(deck.remove(0));
+                }
+            }
+            turn++;
         }
+    }
+    public void shuffleDeck() {
+        ArrayList<Card> shuffledDeck = new ArrayList<Card>();
+        while (deck.size() > 0) {
+            int randomIndex = (int) (Math.random() * deck.size());
+            shuffledDeck.add(deck.remove(randomIndex));
+        }
+        deck = shuffledDeck;
+    }
+    public void remakeDeck(){
+        Card topCard = discard.remove(0);
+        while (discard.size() > 0) {
+            deck.add(discard.remove((int)Math.random()*discard.size()));
+        }
+        discard.add(topCard);
+    }
+    public void PrintTopCard()
+    {
+        System.out.println(discard.get(0));
+    }
+    public boolean isWinner()
+    {
+        for (int i = 0; i < players.size(); i++) {
+            if (players.get(i).Win()) {
+                System.out.println("Player " + i + " wins!");
+                return true;
+            }
+        }
+        return false;
+    }
+    public void discardCard(Card card)
+    {
+        discard.add(0,card);
     }
 }
