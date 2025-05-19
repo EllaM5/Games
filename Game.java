@@ -34,7 +34,7 @@ public class Game
         }
         for (int i = 0; i< players.size();i++){
             ArrayList<Card> hand = new ArrayList<Card>();
-            for (int j = 0; j < 5; j++) {
+            for (int j = 0; j < 10; j++) {
                 hand.add(deck.remove((int)Math.random()*52));
             }
             players.get(i).setHand(hand);
@@ -43,7 +43,7 @@ public class Game
         int turn = 0;
         while (!isWinner())
         {
-            if (turn == players.size()) {
+            if (turn >= players.size()) {
                 turn = 0;
             }
             if (deck.size()==0)
@@ -61,13 +61,33 @@ public class Game
                 int cardIndex = input.nextInt();
                 if (players.get(0).cardMatch(cardIndex, discard.get(0)))
                 {
-                    discardCard(players.get(0).getHand().get(cardIndex));
+                    discardCard(players.get(0).getHand().remove(cardIndex));
                     System.out.println("Card placed down");
                 }
                 else
                 {
                     System.out.println("Card does not match, drawing a card");
                     players.get(0).getHand().add(deck.remove(0));
+                }
+                System.out.println("Press enter to countie");
+                input.nextLine();
+                input.nextLine();
+            }
+            else{
+                int index = players.get(turn).play(discard.get(0));
+                if (index!=-1)
+                {
+                    discardCard(players.get(turn).getHand().remove(index));
+                    System.out.println("Number of cards left: " + players.get(turn).getCardsLeft());
+                    System.out.println("Card placed down, enter to countine");
+                    input.nextLine();
+                }
+                else{
+                    System.out.println("Card does not match, drawing a card");
+                    players.get(turn).getHand().add(deck.remove(0));
+                    System.out.println("Number of cards left: " + players.get(turn).getCardsLeft());
+                    System.out.println("Press enter to countine");
+                    input.nextLine();
                 }
             }
             turn++;
@@ -96,7 +116,7 @@ public class Game
     {
         for (int i = 0; i < players.size(); i++) {
             if (players.get(i).Win()) {
-                System.out.println("Player " + i + " wins!");
+                System.out.println("Player " + (i+1) + " wins!");
                 return true;
             }
         }
