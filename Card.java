@@ -5,9 +5,13 @@ public class Card {
     public Card(String suit, String value) {
         this.suit = suit;
         this.vaule = value;
-        wild = null;
+        wild = "";
     }
     public String toString() {
+        if (!wild.equals(""))
+        {
+            return vaule + " of " + suit + "(" + wild + ")";
+        }
         return vaule + " of " + suit;
     }
     public String getSuit() {

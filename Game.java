@@ -36,7 +36,7 @@ public class Game
         }
         if (handSize >52/playerCount) {
             System.out.println("Hand size is too large, setting to default");
-            handSize = (52/playerCount)-playerCount;
+            handSize = (52/playerCount)-2;
         }
         for (int i = 0; i< players.size();i++){
             ArrayList<Card> hand = new ArrayList<Card>();
@@ -68,16 +68,18 @@ public class Game
                 System.out.println("Which card do you want to place down? (Enter the index)");
                 players.get(0).printHand();
                 int cardIndex = input.nextInt();
+                input.nextLine();
                 while (cardIndex < 0 || cardIndex >= players.get(0).getCardsLeft())
                 {
                     System.out.println("Invalid index, try again");
                     cardIndex = input.nextInt();
+                    input.nextLine();
                 }
                 if (players.get(0).cardMatch(cardIndex, discard.get(0)))
                 {
                     if (players.get(0).getCard(cardIndex).getValue().equals("8"))
                     {
-                        System.out.println("You put down a 8 card, what suit do you want to change to? (S,C,D,H)");
+                        System.out.println("You put down a 8 card, what suit do you want to change to? (Spades,Clubs,Diamonds,Hearts)");
                         String suit = input.nextLine();
                         players.get(0).getCard(cardIndex).setWild(suit);
                         
@@ -90,8 +92,7 @@ public class Game
                     System.out.println("Card does not match, drawing a card");
                     players.get(0).getHand().add(deck.remove(0));
                 }
-                System.out.println("Press enter to countie");
-                input.nextLine();
+                System.out.println("Press enter to continue");
                 input.nextLine();
             }
             else{
@@ -100,6 +101,11 @@ public class Game
                 {
                     discardCard(players.get(turn).getHand().remove(index));
                     System.out.println("Card placed down");
+                    if (discard.get(0).getValue().equals("8"))
+                    {
+                        discard.get(0).setWild(players.get(turn).largestSuit());
+                        System.out.println("Changed suit to " + discard.get(0).getWild());  
+                    }
                     System.out.println("Number of cards left: " + players.get(turn).getCardsLeft());
                     System.out.println("New top card: " + discard.get(0));
                 }
@@ -108,7 +114,7 @@ public class Game
                     players.get(turn).getHand().add(deck.remove(0));
                     System.out.println("Number of cards left: " + players.get(turn).getCardsLeft());
                 }
-                System.out.println("Press enter to countine");
+                System.out.println("Press enter to continue");
                 input.nextLine();
             }
             turn++;
