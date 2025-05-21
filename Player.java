@@ -33,7 +33,8 @@ public class Player {
     }
     public boolean cardMatch(int cardIndex, Card topCard)
     {
-        if (hand.get(cardIndex).getSuit().equals(topCard.getSuit()) || hand.get(cardIndex).getValue().equals(topCard.getValue()))
+        // need to work on making where if the card is wild then it has to match wild
+        if ((hand.get(cardIndex).getSuit().equals(topCard.getWild())&& hand.get(cardIndex).getSuit().equals(topCard.getSuit())) || hand.get(cardIndex).getValue().equals(topCard.getValue()||hand.get(cardIndex).getVaule().equals("8")))
         {
             return true;
         }

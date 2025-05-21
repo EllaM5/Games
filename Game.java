@@ -8,13 +8,15 @@ public class Game
     final private ArrayList<Player> players;
     private int playerCount;
     private ArrayList<Card> discard;
+    private int handSize;
     Scanner input = new Scanner(System.in);
-    public Game(int playerCount)
+    public Game(int playerCount, int handSize)
     {
         this.playerCount = playerCount;
         deck = new ArrayList<Card>();
         players = new ArrayList<Player>();
         discard = new ArrayList<Card>();
+        this.handSize = handSize;
     }
     public void startGame()
     {
@@ -32,9 +34,13 @@ public class Game
         for (int i = 0; i < playerCount; i++) {
             players.add(new Player(i));
         }
+        if (handSize >52/playerCount) {
+            System.out.println("Hand size is too large, setting to default");
+            handSize = (52/playerCount)-playerCount;
+        }
         for (int i = 0; i< players.size();i++){
             ArrayList<Card> hand = new ArrayList<Card>();
-            for (int j = 0; j < 10; j++) {
+            for (int j = 0; j < handSize; j++) {
                 hand.add(deck.remove((int)Math.random()*52));
             }
             players.get(i).setHand(hand);
@@ -50,17 +56,32 @@ public class Game
             {
                 System.out.println("Deck is empty, remaking deck");
                 remakeDeck();
+                System.out.println("Deck remade, press enter to continue");
+                input.nextLine();
             }
             System.out.println(players.get(turn) + "'s turn");
             System.out.println("Card on top ");
             PrintTopCard();
+            input.nextLine();
             if (turn == 0)
             {
                 System.out.println("Which card do you want to place down? (Enter the index)");
                 players.get(0).printHand();
                 int cardIndex = input.nextInt();
+                while (cardIndex < 0 || cardIndex >= players.get(0).getCardsLeft())
+                {
+                    System.out.println("Invalid index, try again");
+                    cardIndex = input.nextInt();
+                }
                 if (players.get(0).cardMatch(cardIndex, discard.get(0)))
                 {
+                    if (players.get(0).getCard(cardIndex).getValue().equals("8"))
+                    {
+                        System.out.println("You put down a 8 card, what suit do you want to change to? (S,C,D,H)");
+                        String suit = input.nextLine();
+                        players.get(0).getCard(cardIndex).setWild(suit);
+                        
+                    }
                     discardCard(players.get(0).getHand().remove(cardIndex));
                     System.out.println("Card placed down");
                 }
@@ -78,17 +99,17 @@ public class Game
                 if (index!=-1)
                 {
                     discardCard(players.get(turn).getHand().remove(index));
+                    System.out.println("Card placed down");
                     System.out.println("Number of cards left: " + players.get(turn).getCardsLeft());
-                    System.out.println("Card placed down, enter to countine");
-                    input.nextLine();
+                    System.out.println("New top card: " + discard.get(0));
                 }
                 else{
                     System.out.println("Card does not match, drawing a card");
                     players.get(turn).getHand().add(deck.remove(0));
                     System.out.println("Number of cards left: " + players.get(turn).getCardsLeft());
-                    System.out.println("Press enter to countine");
-                    input.nextLine();
                 }
+                System.out.println("Press enter to countine");
+                input.nextLine();
             }
             turn++;
         }
